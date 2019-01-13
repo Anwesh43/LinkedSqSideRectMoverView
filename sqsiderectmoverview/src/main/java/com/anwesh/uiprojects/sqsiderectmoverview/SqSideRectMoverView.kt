@@ -212,4 +212,13 @@ class SqSideRectMoverView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : SqSideRectMoverView {
+            val view : SqSideRectMoverView = SqSideRectMoverView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
