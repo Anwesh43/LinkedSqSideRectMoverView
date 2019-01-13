@@ -189,4 +189,26 @@ class SqSideRectMoverView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : SqSideRectMoverView) {
+
+        private val animator : Animator = Animator(view)
+        private val ssrm : SqSideRectMover = SqSideRectMover(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            ssrm.draw(canvas, paint)
+            animator.animate {
+                ssrm.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            ssrm.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
