@@ -21,6 +21,7 @@ val scDiv : Double = 0.51
 val scGap : Float = 0.05f
 val foreColor : Int = Color.parseColor("#4CAF50")
 val backColor : Int = Color.parseColor("#BDBDBD")
+val delay : Long = 25
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
@@ -40,7 +41,7 @@ fun Canvas.drawSSRMNode(i : Int, scale : Float, paint : Paint) {
     val sc1 : Float = scale.divideScale(0, 2)
     val sc2 : Float = scale.divideScale(1, 2)
     val x : Float = (size + rSize + w/2) * sf * sc2
-    val deg : Float = 360f * sc2 * sf
+    val deg : Float = 90f * sc2 * sf
     val rh : Float = rSize
     val rw : Float = 2 * rSize
     save()
@@ -102,7 +103,7 @@ class SqSideRectMoverView(ctx : Context) : View(ctx) {
             if (animated) {
                 cb()
                 try {
-                    Thread.sleep(50)
+                    Thread.sleep(delay)
                     view.invalidate()
                 } catch(ex : Exception) {
 
