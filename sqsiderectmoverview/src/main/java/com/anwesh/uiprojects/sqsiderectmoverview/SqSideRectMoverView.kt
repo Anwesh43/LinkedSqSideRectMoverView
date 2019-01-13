@@ -90,7 +90,7 @@ class SqSideRectMoverView(ctx : Context) : View(ctx) {
         fun startUpdating(cb : () -> Unit) {
             if (dir == 0f) {
                 dir = 1f - 2 * prevScale
-                cb(())
+                cb()
             }
         }
     }
@@ -120,6 +120,50 @@ class SqSideRectMoverView(ctx : Context) : View(ctx) {
             if (animated) {
                 animated = false
             }
+        }
+    }
+
+    data class SSRMNode(var i : Int, val state : State = State()) {
+
+        private var prev : SSRMNode? = null
+        private var next : SSRMNode? = null
+
+        init {
+            addNeighbor()
+        }
+
+        fun addNeighbor() {
+            if (i < nodes - 1) {
+                next = SSRMNode(i + 1)
+                next?.prev = this
+            }
+        }
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            canvas.drawSSRMNode(i, state.scale, paint)
+            next?.draw(canvas, paint)
+        }
+
+        fun update(cb : (Int, Float) -> Unit) {
+            state.update {
+                cb(i, it)
+            }
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            state.startUpdating(cb)
+        }
+
+        fun getNext(dir : Int, cb : () -> Unit) : SSRMNode {
+            var curr : SSRMNode? = prev
+            if (dir == 1) {
+                curr = next
+            }
+            if (curr != null) {
+                return curr
+            }
+            cb()
+            return this
         }
     }
 }
